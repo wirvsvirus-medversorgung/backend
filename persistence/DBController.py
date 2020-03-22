@@ -26,6 +26,13 @@ class DBController:
     def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat, semester=0):
         return self.__connection.insert_student(firstName, lastName, email, phonenumber, password, long, lat, semester)
 
+    def insert_hospital(self, hospital_name, description, lat, long, streetAddress, postalCode, city,searchedPerson,
+                        firstName, lastName, email, phonenumber, password):
+
+        return self.__connection.insert_hospital(hospital_name, description, lat, long, streetAddress, postalCode, city, searchedPerson,
+                        firstName, lastName, email, phonenumber, password)
+
+
     def student_exists(self,email,password):
         row=self.__connection.student_exists(email,password)
         if row is None:

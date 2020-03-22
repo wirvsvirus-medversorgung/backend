@@ -31,29 +31,39 @@ class Student:
         return True
 
 class Hospital:
-    def foo(self, name, ort, strasse, plz, gesucht, coordinates, vorname, nachname, mail, tel, pw):
+    def __init__(self, name, ort, strasse, plz, gesucht, coord, vorname, nachname, mail, tel, pw):
+        self.kontakt = {'vorname':None,'nachname':None,'mail':None,'tel':None,'pw':None}
+        self.id=99
         self.name = name
         self.ort = ort
         self.stasse = strasse
         self.plz = plz
         self.gesucht = gesucht
-        self.coordinates = coordinates
+        #self.coordinates = coordinates
         self.kontakt['vorname'] = vorname
-        self.kontakt['vorname'] = nachname
+        self.kontakt['nachname'] = nachname
         self.kontakt['mail'] = mail
         self.kontakt['tel'] = tel
         self.kontakt['pw'] = pw
+        self.description="ToDo"
+        print(coord)
+        self.coordinates = {'lat': coord[0], 'long': coord[1]}# 4devtest
 
     #class Hospital:
    # (self, hospital_name, description, lat, long, streetAddress, postalCode, city, searchedPerson,
    #  firstName, lastName, email, phonenumber, password)
 
-
+    #hospital_name, description, lat, long, streetAddress, postalCode, city,searchedPerson,
+                   #     firstName, lastName, email, phonenumber, password
 
     def persist(self,db):
             #ToDO: DB insert
             hospitals.append(self)
-            db.insert_hospital()
+            self.id=db.insert_hospital(hospital_name=self.name,description=self.description,
+                               lat=self.coordinates['lat'],long=self.coordinates['lat'],
+                               streetAddress=self.stasse,postalCode=self.plz,city=self.ort,searchedPerson=self.gesucht,
+                               firstName=self.kontakt['vorname'],lastName=self.kontakt['nachname'],
+                               email=self.kontakt['mail'],phonenumber=self.kontakt['tel'],password=self.kontakt['pw'])
             return True
     #ToDo
 

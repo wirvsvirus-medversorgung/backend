@@ -75,11 +75,12 @@ class SQLite3Manager:
         personid = cur.lastrowid
         cur.close()
         statement = 'INSERT INTO Hospital(name, description, lat, long, streetAddress, postalCode, city,searchedPerson, contactPersonId) VALUES(?,?,?,?,?,?,?,?,?)'
-        values = (hospital_name, description, lat, long, streetAddress, postalCode, city,searchedPerson, personid)
+        values = (hospital_name, description, lat, long, streetAddress, postalCode, city,(int(searchedPerson)), personid)
         cur = self.__connection.cursor()
         cur.execute(statement, values)
         self.__connection.commit()
         cur.close()
+        return personid
 
     def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat, semester=0):
         b = password.encode('utf-8')

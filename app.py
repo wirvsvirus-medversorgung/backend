@@ -106,14 +106,22 @@ def add_hospital():
     #coordinates=kliniklocator.get_coordinates_by_name('MHH')
 
     h_name=request.json['name']
+    #(self, name, ort, strasse, plz, gesucht, coordinates, vorname, nachname, mail, tel, pw)
     h=Hospital(
         h_name,
-        locator.get_ort_by_name(h_name),
-        locator.get_plz_by_name(),
-        locator.get_strasse_by_name(h_name),
-        locator.get_coordinates_by_name(h_name)
+        ort=locator.get_ort_by_name(h_name),
+        strasse=locator.get_strasse_by_name(h_name),
+        plz=locator.get_plz_by_name(h_name),
+        gesucht=int(request.json['gesucht']),
+        coord=locator.get_coordinates_by_name(h_name),
+        vorname=request.json['vorname'],
+        nachname=request.json['nachname'],
+        mail=request.json['mail'],
+        tel=request.json['tel'],
+        pw=request.json['pw']
     )
-    h.persist()
+    h.persist(db)
+    return jsonify({"inserted": h_name + '(' + str(h.id) + ')'})
 
     #studenten.append(s)
     return jsonify({"inserted":h.name}), 201
