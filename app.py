@@ -6,16 +6,14 @@ from entity import *
 import entity
 from clinic_locator import ClinicLocator
 from persistence.DBController import DBController
-import PersistenceTest
-import logging
-#PersistenceTest.testDB()
 __author__='Max'
 __status__='DEV'
 
 
 app = Flask(__name__)
 locator=ClinicLocator()
-db=DBController
+db=DBController("sqlite3")
+
 @app.route('/')
 def test():
     return "studepimy API"
@@ -26,15 +24,6 @@ def test():
 '''
 
 
-@app.route('/person/add')
-def add_user():
-    vorname = request.json['vorname']
-    nachname = request.json['nachname']
-    mail = request.json['mail']
-    tel = request.json['tel']
-    semester=request.json['semester']
-
-    #db..
 '''
     In Proc
 '''
@@ -125,9 +114,14 @@ def find_hospitals():
     #result=entity.find_hospitals(stud,locator)
 
     location = {'lat': 52.375893, 'long': 9.732010}
-    loc_radius = 100000;
-    result=locator.get_hospitals_by_coordinates(la=location['long'],lo=location['lat'],radius=loc_radius)
-    return jsonify({'found:':len(result)})
+    #loc_radius = 100000;
+    #result=locator.get_hospitals_by_coordinates(la=location['long'],lo=location['lat'],radius=loc_radius)
+    location = (52.375893, 9.732010)
+    loc_radius = 10000;
+    result = locator.get_hospitals_by_coordinates(location[0], location[1], loc_radius)
+
+    return jsonify(result)
+    #return jsonify({'found:':len(result)})
     #return jsonify(result)
 
 

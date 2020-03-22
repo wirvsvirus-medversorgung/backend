@@ -12,15 +12,20 @@ class DBController:
     def __init__(self, dbtype):
         if dbtype in self.__validTypes:
             self.__dbtype = dbtype
+        self.__connect()
 
     def __connect(self):
         if self.__dbtype == "sqlite3":
             self.__connection = SQLite3Manager("sqlite3")
-            self.__connection.connect()
+        self.__connection.connect()
 
     def insert(self, word):
         if not self.__connection:
             self.__connect()
+
+    def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat, semester=0):
+        return self.__connection.insert_student(firstName, lastName, email, phonenumber, password, long, lat, semester)
+
 
     def test_db(self):
         self.__connect()

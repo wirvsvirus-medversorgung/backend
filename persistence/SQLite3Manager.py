@@ -21,7 +21,7 @@ class SQLite3Manager:
     def connect(self):
         if not self.file:
             self.file = ":memory:"
-        self.__connection = sqlite3.connect(self.file)
+        self.__connection = sqlite3.connect(self.file, check_same_thread=False)
 
     def disconnect(self):
         if self.__connection:
@@ -96,3 +96,5 @@ class SQLite3Manager:
         cur.execute(statement, values)
         self.__connection.commit()
         cur.close()
+
+        return personid

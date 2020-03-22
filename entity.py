@@ -16,16 +16,18 @@ class Student:
         self.name=name
         self.mail=mail
         self.tel=tel
-
+        self.coordinates = {'long': -1, 'lat': -2}
         self.pw='TEST23'
-
+        self.semester=0
 
     def persist(self, db):
         #ToDO: DB insert
+        self.id=db.insert_student(self.vorname, self.name, self.mail, self.tel, self.pw, self.coordinates['long'], self.coordinates['lat'], self.semester)
+
         #insert_student(self,vorname,name,mail,tel,pw,long,lat)
         #self,vorname,name,mail,tel,pw,long,lat)
         #db.insert_student(self.vorname,self.name,self.mail,self.tel,self.pw,self.location['long'],self.location['lat'])
-        studenten.append(self)
+        #studenten.append(self)
         return True
 
 
