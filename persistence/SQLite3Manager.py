@@ -64,23 +64,7 @@ class SQLite3Manager:
         ''')
 
 
-    def insert_hospital(self, hospital_name, description, lat, long, streetAddress, postalCode, city,searchedPerson,
-                        firstName, lastName, email, phonenumber, password):
-        b = password.encode('utf-8')
-        statement = 'INSERT INTO Person(firstName,lastName, email, phoneNumber, password) VALUES (?,?,?,?,?);'
-        values = (firstName, lastName, email, phonenumber, bcrypt.hashpw(b, self.salt))
-        cur = self.__connection.cursor()
-        cur.execute(statement, values)
-        self.__connection.commit()
-        personid = cur.lastrowid
-        cur.close()
-        statement = 'INSERT INTO Hospital(name, description, lat, long, streetAddress, postalCode, city,searchedPerson, contactPersonId) VALUES(?,?,?,?,?,?,?,?,?)'
-        values = (hospital_name, description, lat, long, streetAddress, postalCode, city,(int(searchedPerson)), personid)
-        cur = self.__connection.cursor()
-        cur.execute(statement, values)
-        self.__connection.commit()
-        cur.close()
-        return personid
+
 
     def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat, semester=0):
         b = password.encode('utf-8')
@@ -102,14 +86,30 @@ class SQLite3Manager:
 
     def get_student(self, myid):
         cur = self.__connection.cursor()
-        cur.execute("SELECT * FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Student.id=?",
-                    str(myid))
+        cur.execute("SELECT * FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.id=?",
+                    (str(myid),))
+
         row = cur.fetchone()
+        print(row)
         cur.close()
         return row
 
+    def get_student_location(self, myid):
+        cur = self.__connection.cursor()
+        cur.execute("SELECT lat, long FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.id=?",
+                    (str(myid),))
+
+        row = cur.fetchone()
+        print(row)
+        cur.close()
+        self.get_student(myid)
+        return row
+
+
     def student_password_correct(self,email,password):
         cur = self.__connection.cursor()
+        print(email)
+        print(password)
         cur.execute("SELECT Person.password FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.email=? " , (email,))
         dbpassword = cur.fetchone()
         cur.close()

@@ -4,7 +4,9 @@ from geopy.distance import lonlat, distance
 __author__ = 'Hendrik, Jean'
 __status__ = 'DEV'
 
-
+'''
+    Final
+'''
 class ClinicLocator:
     def __init__(self):
         with open('hospitals.geojson') as f:

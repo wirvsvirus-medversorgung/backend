@@ -8,21 +8,29 @@ class Student:
     tel=None
     pw=None
     location={'long':52.375893,'lat':9.732010}
-    radius=10;
+    #radius=10; #ToDo?
 
-    def __init__(self,vorname,name,mail,tel):
+    def __init__(self,vorname,name,mail,tel,coord,semester,pw):
+        #print(self.location)
+        #print('coord:'+str(coord))
         self.id=99
         self.vorname=vorname
         self.name=name
         self.mail=mail
         self.tel=tel
-        self.coordinates = {'long': -1, 'lat': -2}
-        self.pw='TEST23'
-        self.semester=0
-
+        self.coordinates = coord,
+        self.pw=pw
+        self.semester=semester
+        self.location['lat']=coord['lat']
+        self.location['long']=coord['long'] #ToDo: Quickfix, stupid code
     def persist(self, db):
-        #ToDO: DB insert
-        self.id=db.insert_student(self.vorname, self.name, self.mail, self.tel, self.pw, self.coordinates['long'], self.coordinates['lat'], self.semester)
+        #print(self.coordinates)
+        lat = float(self.location['lat'])
+        long = float(self.location['long'])
+        self.id=db.insert_student(
+
+           firstName=self.vorname, lastName=self.name, email=self.mail, phonenumber=self.tel,
+            password=self.pw, long=long, lat=lat, semester=self.semester)
 
         #insert_student(self,vorname,name,mail,tel,pw,long,lat)
         #self,vorname,name,mail,tel,pw,long,lat)
@@ -69,36 +77,38 @@ class Hospital:
 
 
 
-studenten=[]
-
+#studenten=[]
 hospitals=[]
 
+'''
 def get_student_by_name(nachname):
     #ToDO: DB
     for s in studenten:
         if s.name == nachname:
             return s
     return "Nicht vorhnanden"
-
+'''
 
 def student_id_exitsts(sid):
     # ToDO: DB
-    for s in studenten:
+    '''for s in studenten:
         print('s.id = ' + str(s.id))
         print('id = ' + str(sid))
         print(((int(s.id)) == ((int(sid)))))
         if ((int(s.id)) == ((int(sid)))):
             return True
+    '''
     return False
 
 
 def get_student_by_id(sid):
     # ToDO: DB
+    '''
     for s in studenten:
 
         if int(s.id) == int(sid):
             return s
-
+    '''
 
     return "Nicht vorhnanden"
 
