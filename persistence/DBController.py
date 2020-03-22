@@ -60,6 +60,9 @@ class DBController:
         res= self.__connection.get_student_location(sid)
         return res
 
+    def get_student_by_mail(self,mail):
+        return self.__connection.get_student_by_mail(mail)
+
     '''
         def student_exists_by_id(self,sid):
             row = self.__connection.student_exists_by_id(sid)

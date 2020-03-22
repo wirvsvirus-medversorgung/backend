@@ -29,16 +29,23 @@ def login():
     pw=request.json['password']
 
     auth_check=db.student_exists(email,pw)
-    #if auth_check is False:
-    #    auth_check=db.hospital_exists(email,pw)
 
     if auth_check is False:
         return "Bad Login"
     else:
+        srec=db.get_student_by_mail(email)
+        print(srec)
+        #vorname,name,mail,tel,coord,semester,pw)
+        print("-->"+str(srec[5]))
+        coordinates = {'long': float(srec[4]), 'lat': float(srec[3])}
+
+        stud=Student(vorname=srec[6],name=srec[7],mail=srec[8],tel=srec[9],coord=coordinates,semester=srec[2],pw='HIDDEN')
+        stud.id=srec[1]
+
         user = User()
         user.id = email
         flask_login.login_user(user)
-        return 'Login'
+        return jsonify(stud.__dict__)
 
 locator=ClinicLocator()
 db=DBController("sqlite3")
@@ -117,10 +124,13 @@ def find_hospitals():
 class User(flask_login.UserMixin):
     pass
 @login_manager.user_loader
-def load_user(user_id):
-    db.get_person_id(email)
-    return
-    #return User.get(user_id)
+def user_loader(email):
+    if db.get_student_by_mail(email) is None:
+        return
+
+    user = User()
+    user.id = email
+    return user
 
 
 

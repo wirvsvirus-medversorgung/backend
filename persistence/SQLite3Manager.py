@@ -105,8 +105,7 @@ class SQLite3Manager:
 
     def get_student_by_mail(self, email):
         cur = self.__connection.cursor()
-        cur.execute("SELECT * FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.email=?",
-                    str(email))
+        cur.execute("SELECT * FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.email=?",(email,))
         row = cur.fetchone()
         cur.close()
         return row
