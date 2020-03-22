@@ -5,6 +5,7 @@ import flask_login
 from flask_swagger import swagger
 from entity import *
 import entity
+from flask_cors import CORS
 from clinic_locator import ClinicLocator
 from persistence.DBController import DBController
 __author__='Max'
@@ -13,6 +14,7 @@ __status__='DEV'
 
 app = Flask(__name__)
 app.secret_key = 'test123'  # Change this!
+CORS(app)
 
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
