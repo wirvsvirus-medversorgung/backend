@@ -7,6 +7,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 -- Flask License
+
 Copyright 2010 Pallets
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
