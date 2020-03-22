@@ -99,7 +99,7 @@ def update_student(nachname):
     return jsonify(s.__dict__)
 
 #----------------------------------------------------------------------------------
-
+#
 @app.route('/hospital',methods=['POST'])
 def add_hospital():
     #coordinates={'lat':0.0,'lan':0.0} # ToDO Klinik Locator
@@ -109,10 +109,8 @@ def add_hospital():
     h=Hospital(
         h_name,
         locator.get_ort_by_name(h_name),
-        request.json['strasse'],
-        request.json['hausnr'],
-        request.json['plz'],
-       # request.json['covid_patienten'],
+        locator.get_plz_by_name(),
+        locator.get_strasse_by_name(h_name),
         locator.get_coordinates_by_name(h_name)
     )
     h.persist()

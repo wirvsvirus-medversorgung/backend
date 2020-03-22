@@ -30,46 +30,31 @@ class Student:
         #studenten.append(self)
         return True
 
-
 class Hospital:
-    id=None
-    benoetigt = {'pfleger': 0, 'ota': 0}  # differnzierung nach berufsgruppen?
-    name=None
-    ort=None
-    stasse=None
-    hausnr=None
-    plz=None
-    covid_patienten=None
-    coordinates = {'long': -1, 'lat': -2}
-    """"
-         @ Map-Team
-   
-   ToDo:  coordinates = klinik_locator.get_coordinates_by_name(name)
-    
-    Anmerkung: name stammt aus der Liste, ein Name zu dem es keine Coordinaten gibt kann nicht kommen
-    
-    ToDO: hospitals=klinik_locator.get_hospitals_by_coordinates(origin, radius)
-    
-    Anmerkung: Oring und Radius kommen vom UI
-    
-    """
+    def foo(self, name, ort, strasse, plz, gesucht, coordinates, vorname, nachname, mail, tel, pw):
+        self.name = name
+        self.ort = ort
+        self.stasse = strasse
+        self.plz = plz
+        self.gesucht = gesucht
+        self.coordinates = coordinates
+        self.kontakt['vorname'] = vorname
+        self.kontakt['vorname'] = nachname
+        self.kontakt['mail'] = mail
+        self.kontakt['tel'] = tel
+        self.kontakt['pw'] = pw
+
+    #class Hospital:
+   # (self, hospital_name, description, lat, long, streetAddress, postalCode, city, searchedPerson,
+   #  firstName, lastName, email, phonenumber, password)
 
 
 
-    def __init__(self,name,ort,strasse,hausnr,plz,coordinates):
-        self.name=name
-        self.ort=ort
-        self.stasse=strasse
-        self.hausnr=hausnr
-        self.plz=plz
-        #self.covid_patienten=covid_patienten
-        self.coordinates=coordinates
-
-
-    def persist(self):
-        #ToDO: DB insert
-        hospitals.append(self)
-        return True
+    def persist(self,db):
+            #ToDO: DB insert
+            hospitals.append(self)
+            db.insert_hospital()
+            return True
     #ToDo
 
 
