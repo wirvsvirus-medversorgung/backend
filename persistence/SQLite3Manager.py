@@ -106,12 +106,12 @@ class SQLite3Manager:
         row = cur.fetchone()
         cur.close()
         return row
-    def student_exists(self,email,password):
+
+    def student_password_correct(self,email,password):
         cur = self.__connection.cursor()
-        cur.execute("SELECT Person.id FROM Student INNER JOIN Person ON Student.personId=Person.id "
-                    "WHERE Person.email=? AND Person.password=? ",(email,password))
-        row = cur.fetchone()
+        cur.execute("SELECT Person.password FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.email=? " , (email,))
+        dbpassword = cur.fetchone()
         cur.close()
-        return row
+        return bcrypt.checkpw(password.encode('utf8'), dbpassword[0])
 
     #def student_exists_by_id(self,sid):
