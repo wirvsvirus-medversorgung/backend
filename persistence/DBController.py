@@ -26,7 +26,24 @@ class DBController:
     def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat, semester=0):
         return self.__connection.insert_student(firstName, lastName, email, phonenumber, password, long, lat, semester)
 
-
+    def student_exists(self,email,password):
+        row=self.__connection.student_exists(email,password)
+        if row is None:
+            return False
+        if(len(row)==0):
+            return False
+        else:
+            return True
+    '''
+        def student_exists_by_id(self,sid):
+            row = self.__connection.student_exists_by_id(sid)
+            if row is None:
+                return False
+            if (len(row) == 0):
+                return False
+            else:
+                return True
+    '''
     def test_db(self):
         self.__connect()
         self.__connection.init_db()

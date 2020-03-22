@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+import flask_login
 from flask_swagger import swagger
 from entity import *
 import entity
@@ -11,6 +12,31 @@ __status__='DEV'
 
 
 app = Flask(__name__)
+app.secret_key = 'test123'  # Change this!
+
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+class User(flask_login.UserMixin):
+    pass
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    email= request.json['email']
+    pw=request.json['password']
+
+    auth_check=db.student_exists(email,pw)
+    #if auth_check is False:
+    #    auth_check=db.hospital_exists(email,pw)
+
+    if auth_check is False:
+        return "Bad Login"
+    else:
+        user = User()
+        user.id = email
+        flask_login.login_user(user)
+        return 'Login'
+
 locator=ClinicLocator()
 db=DBController("sqlite3")
 
@@ -39,7 +65,7 @@ def add_student():
     tel = request.json['tel']
     s=Student(vorname,nachname,mail,tel)# Test
     s.persist(db)
-    studenten.append(s)
+    #studenten.append(s)
     return jsonify({"inserted":nachname+'('+str(s.id)+')'})
 
 
@@ -108,14 +134,10 @@ def get_hospital_by_name(name):
 @app.route('/find_hospitals', methods=['GET'])
 def find_hospitals():
     #stud_id=request.args.get('studid')
-    #stud_id=99
-    #stud=entity.get_student_by_id(stud_id)
+    stud_id=99
+    stud=entity.get_student_by_id(stud_id)
 
-    #result=entity.find_hospitals(stud,locator)
 
-    location = {'lat': 52.375893, 'long': 9.732010}
-    #loc_radius = 100000;
-    #result=locator.get_hospitals_by_coordinates(la=location['long'],lo=location['lat'],radius=loc_radius)
     location = (52.375893, 9.732010)
     loc_radius = 10000;
     result = locator.get_hospitals_by_coordinates(location[0], location[1], loc_radius)

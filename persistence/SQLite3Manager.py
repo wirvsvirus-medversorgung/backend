@@ -106,3 +106,12 @@ class SQLite3Manager:
         row = cur.fetchone()
         cur.close()
         return row
+    def student_exists(self,email,password):
+        cur = self.__connection.cursor()
+        cur.execute("SELECT Person.id FROM Student INNER JOIN Person ON Student.personId=Person.id "
+                    "WHERE Person.email=? AND Person.password=? ",(email,password))
+        row = cur.fetchone()
+        cur.close()
+        return row
+
+    #def student_exists_by_id(self,sid):
