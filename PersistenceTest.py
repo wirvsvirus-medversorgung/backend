@@ -1,7 +1,8 @@
 from persistence.DBController import DBController
 
-__author__='Marc'
+__author__='Marc, Hendrik'
 __status__='DEV'
 
-controller = DBController("sqlite3")
-controller.test_db()
+def testDB():
+    controller = DBController("sqlite3")
+    controller.test_db()

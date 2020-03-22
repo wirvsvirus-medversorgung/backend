@@ -6,6 +6,9 @@ from entity import *
 import entity
 from clinic_locator import ClinicLocator
 
+import PersistenceTest
+
+PersistenceTest.testDB()
 __author__='Max'
 __status__='DEV'
 
