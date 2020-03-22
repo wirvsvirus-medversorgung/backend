@@ -98,3 +98,11 @@ class SQLite3Manager:
         cur.close()
 
         return personid
+
+    def get_student(self, myid):
+        cur = self.__connection.cursor()
+        cur.execute("SELECT * FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Student.id=?",
+                    str(myid))
+        row = cur.fetchone()
+        cur.close()
+        return row
