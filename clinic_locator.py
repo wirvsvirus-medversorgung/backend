@@ -19,7 +19,7 @@ class ClinicLocator:
         return self.kkh_ort[name]
 
     def get_hospitals_by_coordinates(self, la, lo, radius):  # radius in meter
-        '''
+        '''  
         {
             "name": "Krankenhaus"
             "address": "Marienberg 99, 093773 Berlin",
