@@ -19,6 +19,14 @@ class ClinicLocator:
         return self.kkh_ort[name]
 
     def get_hospitals_by_coordinates(self, la, lo, radius):  # radius in meter
+        '''
+        {
+            "name": "Krankenhaus"
+            "address": "Marienberg 99, 093773 Berlin",
+            "distance": "3", //drei kilometer entfernt,
+            "description": "Wir suchen 63 Blutabnehmer und zweie mit Erfahrung im Beatmen" (max)
+        }
+        '''
         dist_list = []  # (Distance,Name)
         for k in self.kkh_dic:
             dist_list.append((distance(lonlat(*(la, lo)), self.kkh_dic[k]).m, k))
