@@ -6,3 +6,6 @@ __status__='DEV'
 def testDB():
     controller = DBController("sqlite3")
     controller.test_db()
+
+
+testDB()

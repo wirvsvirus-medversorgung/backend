@@ -26,5 +26,5 @@ class DBController:
         self.__connect()
         self.__connection.init_db()
         self.__connection.insert_hospital("hosputal_name", "hospital_description", 43.6, 45.7, "Adresse", "4525",
-                                          "Hannover", "first", "last", "ssdas@sdas.de", "sadsa", "passw")
-        self.__connection.insert_student("first", "last", "ssdas@sdas.de", "sadsa", "passw", 43.6, 45.7)
+                                          "Hannover", 25, "first", "last", "ssdas@sdas.de", "sadsa", "passw")
+        self.__connection.insert_student("first", "last", "ssdas@sdas.de", "sadsa", "passw", 43.6, 45.7,5)

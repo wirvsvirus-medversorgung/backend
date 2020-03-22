@@ -30,7 +30,7 @@ class SQLite3Manager:
 
     def init_db(self):
         self.__connection.execute('''CREATE TABLE Hospital
-        (id         INT     PRIMARY KEY             ,
+        (id         INTEGER     PRIMARY KEY         ,
         name        TEXT                    NOT NULL,
         description TEXT                    NOT NULL,
         lat         REAL                    NOT NULL,
@@ -38,12 +38,14 @@ class SQLite3Manager:
         streetAddress   TEXT                NOT NULL,
         postalCode  TEXT                    NOT NULL,
         city        TEXT                    NOT NULL,
+        employmentContract  INT                     ,
+        searchedPerson  INT                 NOT NUll,
         contactPersonId INT                 NOT NULL
         );
         ''')
 
         self.__connection.execute('''CREATE TABLE Person
-        (id         INT     PRIMARY KEY             ,
+        (id         INTEGER     PRIMARY KEY         ,
         firstName   TEXT                    NOT NULL,
         lastName    TEXT                    NOT NULL,
         email       TEXT                    NOT NULL,
@@ -53,127 +55,43 @@ class SQLite3Manager:
         ''')
 
         self.__connection.execute('''CREATE TABLE Student
-        (id         INT     PRIMARY KEY             ,
+        (id         INTEGER     PRIMARY KEY         ,
         personId    INT                     NOT NULL,
+        semester    INT                             ,
         lat         REAL                    NOT NULL,
         long        REAL                    NOT NULL
         );
         ''')
 
-        self.__connection.execute('''CREATE TABLE SearchedPerson
-        (id         INT     PRIMARY KEY             ,
-        hospitalId  INT                     NOT NULL,
-        fieldOfApplicationId INT            NOT NULL,
-        priorMedicalExperienceId    INT     NOT NULL,
-        competenciesId  INT                 NOT NULL
-        );
-        ''')
 
-        self.__connection.execute('''CREATE TABLE SP_FoA
-        (id         INT     PRIMARY KEY             ,
-        searchedPersonID   INT              NOT NULL,
-        fieldOfApplicationID    INT         NOT NULL
-        );
-        ''')
-
-        self.__connection.execute('''CREATE TABLE FieldOfApplication
-        (id         INT     PRIMARY KEY             ,
-        applicationField    TEXT            NOT NULL
-        );
-        ''')
-
-        self.__connection.execute('''CREATE TABLE SP_PME
-        (id         INT     PRIMARY KEY             ,
-        searchedPersonID   INT              NOT NULL,
-        priorMedicalExperienceID    INT     NOT NULL
-        );
-        ''')
-
-        self.__connection.execute('''CREATE TABLE PriorMedicalExperience
-        (id         INT     PRIMARY KEY             ,
-        experience  TEXT                    NOT NULL
-        );
-        ''')
-
-        self.__connection.execute('''CREATE TABLE SP_C
-        (id         INT     PRIMARY KEY             ,
-        searchedPersonID   INT              NOT NULL,
-        competenciesID    INT               NOT NULL
-        );
-        ''')
-
-        self.__connection.execute('''CREATE TABLE Competencies
-        (id         INT     PRIMARY KEY             ,
-        competencies  TEXT                   NOT NULL
-        );
-        ''')
-
-        self.insert_field_of_application()
-        self.insert_prior_medical_experience()
-        self.insert_competencies()
-
-    def insert_field_of_application(self):
-        fields = ['innere Medizin', 'Chirurgie', 'Anästhesie/Intensivmedizin', 'Notfallaufnahme', 'Radiologie',
-                  'Telefonberatung']
-        for x in range(len(fields)):
-            values = (x + 1, fields[x])
-            statement = "INSERT INTO FieldOfApplication(ID, applicationField) VALUES (?,?)"
-            cur = self.__connection.cursor()
-            cur.execute(statement, values)
-            self.__connection.commit()
-            cur.close()
-
-    def insert_prior_medical_experience(self):
-        fields = ['Abgeschlossene pflegerische Ausbildung', 'Intensivpflege', 'Beatmungserfahrung',
-                  'Operationstechnische Assistenz', 'Hakenhalter/-in', 'Medizinisch-technische Assistenz',
-                  'Notfallsanitäter/-in', 'Rettungssanitäter/-in', 'Laborerfahrung']
-        for x in range(len(fields)):
-            values = (x + 1, fields[x])
-            statement = "INSERT INTO PriorMedicalExperience(ID, experience) VALUES (?,?)"
-            cur = self.__connection.cursor()
-            cur.execute(statement, values)
-            self.__connection.commit()
-            cur.close()
-
-    def insert_competencies(self):
-        fields = ['Blutentnahme', 'Periphere Venenzugänge', 'Medikamente und Infusionen richten', 'Impfen']
-        for x in range(len(fields)):
-            values = (x + 1, fields[x])
-            statement = "INSERT INTO Competencies(ID, competencies) VALUES (?,?)"
-            cur = self.__connection.cursor()
-            cur.execute(statement, values)
-            self.__connection.commit()
-            cur.close()
-
-    def insert_hospital(self, hospital_name, hospital_description, lat, long, streetAddress, postalCode, city,
+    def insert_hospital(self, hospital_name, description, lat, long, streetAddress, postalCode, city,searchedPerson,
                         firstName, lastName, email, phonenumber, password):
-
         b = password.encode('utf-8')
-        statement = 'INSERT INTO Person(id,firstName,lastName, email, phoneNumber, password) VALUES (NULL,?,?,?,?,?);'
+        statement = 'INSERT INTO Person(firstName,lastName, email, phoneNumber, password) VALUES (?,?,?,?,?);'
         values = (firstName, lastName, email, phonenumber, bcrypt.hashpw(b, self.salt))
         cur = self.__connection.cursor()
         cur.execute(statement, values)
         self.__connection.commit()
         personid = cur.lastrowid
         cur.close()
-        statement = 'INSERT INTO Hospital(id,name, description, lat, long, streetAddress, postalCode, city, contactPersonId) VALUES(NULL,?,?,?,?,?,?,?,?)'
-        values = (hospital_name, hospital_description, lat, long, streetAddress, postalCode, city, personid)
+        statement = 'INSERT INTO Hospital(name, description, lat, long, streetAddress, postalCode, city,searchedPerson, contactPersonId) VALUES(?,?,?,?,?,?,?,?,?)'
+        values = (hospital_name, description, lat, long, streetAddress, postalCode, city,searchedPerson, personid)
         cur = self.__connection.cursor()
         cur.execute(statement, values)
         self.__connection.commit()
         cur.close()
 
-    def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat):
+    def insert_student(self, firstName, lastName, email, phonenumber, password, long, lat, semester=0):
         b = password.encode('utf-8')
-        statement = 'INSERT INTO Person(id,firstName,lastName, email, phoneNumber, password) VALUES (NULL,?,?,?,?,?);'
+        statement = 'INSERT INTO Person(firstName,lastName, email, phoneNumber, password) VALUES (?,?,?,?,?);'
         values = (firstName, lastName, email, phonenumber, bcrypt.hashpw(b, self.salt))
         cur = self.__connection.cursor()
         cur.execute(statement, values)
         self.__connection.commit()
         personid = cur.lastrowid
         cur.close()
-        statement = 'INSERT INTO Student(id, personId, lat, long) VALUES(NULL,?,?,?)'
-        values = (personid, lat, long)
+        statement = 'INSERT INTO Student(personId, lat, long, semester) VALUES(?,?,?,?)'
+        values = (personid, lat, long, semester)
         cur = self.__connection.cursor()
         cur.execute(statement, values)
         self.__connection.commit()
