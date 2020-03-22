@@ -54,6 +54,10 @@ class DBController:
     def test_db(self):
         self.__connect()
         self.__connection.init_db()
-        self.__connection.insert_hospital("hosputal_name", "hospital_description", 43.6, 45.7, "Adresse", "4525",
+        self.__connection.insert_hospital("My Hospital Hannover", "hospital_description", 43.6, 45.7, "Adresse", "4525",
                                           "Hannover", 25, "first", "last", "ssdas@sdas.de", "sadsa", "passw")
-        self.__connection.insert_student("first", "last", "ssdas@sdas.de", "sadsa", "passw", 43.6, 45.7,5)
+        self.__connection.insert_student("first", "last", "test@gmx.de", "05121451", "passw", 43.6, 45.7,5)
+        print(self.__connection.student_password_correct("test@gmx.de", "passw"))
+        print(self.__connection.student_password_correct("test@gmx.de", "passwsd"))
+        print(self.__connection.get_hospital_by_id(1))
+        print(self.__connection.get_hospital_by_name("Hannover"))

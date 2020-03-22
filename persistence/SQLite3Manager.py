@@ -108,6 +108,32 @@ class SQLite3Manager:
         cur.close()
         return row
 
+    def get_student_by_mail(self, email):
+        cur = self.__connection.cursor()
+        cur.execute("SELECT * FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.email=?",
+                    str(email))
+        row = cur.fetchone()
+        cur.close()
+        return row
+
+    def get_hospital_by_id(self, myid):
+        cur = self.__connection.cursor()
+        cur.execute(
+            "SELECT * FROM Hospital INNER JOIN Person ON Hospital.contactPersonId=Person.id WHERE Hospital.id=?",
+            str(myid))
+        row = cur.fetchone()
+        cur.close()
+        return row
+
+    def get_hospital_by_name(self, name):
+        cur = self.__connection.cursor()
+        cur.execute(
+            "SELECT * FROM Hospital INNER JOIN Person ON Hospital.contactPersonId=Person.id WHERE Hospital.name like ?",
+            (str("%" + name + "%"),))
+        row = cur.fetchone()
+        cur.close()
+        return row
+
     def student_password_correct(self,email,password):
         cur = self.__connection.cursor()
         cur.execute("SELECT Person.password FROM Student INNER JOIN Person ON Student.personId=Person.id WHERE Person.email=? " , (email,))
