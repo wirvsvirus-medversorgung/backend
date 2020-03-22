@@ -5,28 +5,43 @@ from flask_swagger import swagger
 from entity import *
 import entity
 from clinic_locator import ClinicLocator
-
+from persistence.DBController import DBController
 import PersistenceTest
-
-PersistenceTest.testDB()
+import logging
+#PersistenceTest.testDB()
 __author__='Max'
 __status__='DEV'
 
 
 app = Flask(__name__)
 locator=ClinicLocator()
-
+db=DBController
 @app.route('/')
 def test():
     return "studepimy API"
 
-@app.route("/spec")
-def spec():
-    swag = swagger(app)
-    swag['info']['version'] = "1.0"
-    swag['info']['title'] = "My API"
-    return jsonify(swag)
 
+'''
+    Final
+'''
+
+
+@app.route('/person/add')
+def add_user():
+    vorname = request.json['vorname']
+    nachname = request.json['nachname']
+    mail = request.json['mail']
+    tel = request.json['tel']
+    semester=request.json['semester']
+
+    #db..
+'''
+    In Proc
+'''
+
+
+
+# Neuen Studenten erstellen
 @app.route('/student',methods=['POST'])
 def add_student():
     vorname = request.json['vorname']
@@ -34,19 +49,30 @@ def add_student():
     mail = request.json['mail']
     tel = request.json['tel']
     s=Student(vorname,nachname,mail,tel)# Test
-    s.persist()
-    #studenten.append(s)
-    return jsonify({"inserted":nachname})
+    s.persist(db)
+    studenten.append(s)
+    return jsonify({"inserted":nachname+'('+str(s.id)+')'})
+
 
 @app.route('/student', methods=['GET'])
 def get_student():
     return jsonify({"studenten":len(studenten)})
 
+@app.route('/student/<sid>', methods=['GET'])
+def get_student_by_studid(sid):
+    if student_id_exitsts(sid) is True:
+        s=get_student_by_id(sid)
+        return jsonify(s.__dict__)
+    else:
+        return "Student existiert nicht!",400
+
+
+'''
 @app.route('/student/<nachname>', methods=['GET'])
 def get_student_by_nachname(nachname):
     s=get_student_by_name(nachname)
     return jsonify(s.__dict__)
-
+'''
 @app.route('/student/<nachname>', methods=['PUT'])
 def update_student(nachname):
     s=get_student_by_name(nachname)
@@ -71,7 +97,7 @@ def add_hospital():
         request.json['strasse'],
         request.json['hausnr'],
         request.json['plz'],
-        request.json['covid_patienten'],
+       # request.json['covid_patienten'],
         locator.get_coordinates_by_name(h_name)
     )
     h.persist()
@@ -90,8 +116,19 @@ def get_hospital_by_name(name):
     return jsonify(h)
 
 #----------------------------------------------------------------------------------
+@app.route('/find_hospitals', methods=['GET'])
+def find_hospitals():
+    #stud_id=request.args.get('studid')
+    #stud_id=99
+    #stud=entity.get_student_by_id(stud_id)
 
+    #result=entity.find_hospitals(stud,locator)
 
+    location = {'lat': 52.375893, 'long': 9.732010}
+    loc_radius = 100000;
+    result=locator.get_hospitals_by_coordinates(la=location['long'],lo=location['lat'],radius=loc_radius)
+    return jsonify({'found:':len(result)})
+    #return jsonify(result)
 
 
 
